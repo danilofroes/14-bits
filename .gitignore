@@ -19,3 +19,10 @@ Thumbs.db
 
 *.log
 npm-debug.log*
+
+# variáveis locais do front
+.env.local
+.env
+
+# banco local do Flask (api/)
+instance/

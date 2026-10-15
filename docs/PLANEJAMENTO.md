@@ -63,11 +63,21 @@ Para o domínio, recomendo **`14bits.com.br` sem hífen**: hífen se perde quand
 
 **Render e Railway permanecem reservados ao SALVE.** O 14-Bits não consome infraestrutura paga.
 
-### 3.2. Sem backend
+### 3.2. Backend: conta opcional
 
-O app é local-first: sem login, sem servidor, sem dado pessoal. Isso não é economia — é o que evita ter que tratar consentimento de menores de idade numa oficina aberta.
+**Revisado em 15/10/2026.** O plano original era não ter backend nenhum. Passou a ter, com uma API Flask em `api/` — mesma stack do SALVE, no Render, com Postgres no Railway.
 
-Se em novembro você quiser números de uso para o relatório final, aí sim entra uma API Flask mínima na instância Render que já está paga. Fica como fase 2 opcional.
+A decisão que mantém o risco sob controle: **a conta é opcional**. O app funciona inteiro sem ela, e quem chega pelo QR code na Nave começa a estudar em dez segundos sem digitar nada. A conta resolve um problema só — levar o progresso de um aparelho para outro.
+
+Sobre dados pessoais, já que o público inclui adolescentes:
+
+- Guardado: nome de usuário, e-mail, hash da senha e quais lições foram feitas.
+- **Não guardado:** as reflexões (texto livre sobre a vida da pessoa, ficam só no aparelho) e XP/ofensiva (recalculados no servidor a partir das lições).
+- Sem telemetria, sem IP, sem histórico.
+
+Detalhes, rotas e decisões de segurança em [api/LEIAME.md](../api/LEIAME.md).
+
+**Ainda pendente antes de abrir para o público:** aviso de privacidade escrito, recuperação de senha e o botão de apagar a conta (direito garantido pela LGPD).
 
 ### 3.3. Estrutura do repositório
 
@@ -259,8 +269,8 @@ O último é o mais importante. Se criar uma lição levar três horas, a arquit
 
 ## 10. Fora do escopo (decisão, não esquecimento)
 
-- Login, conta ou senha — fora do MVP
-- Backend próprio — fase 2, só se houver necessidade de métricas
+- Backend próprio e conta — **entrou em 15/10/2026**, ver §3.2
+- Login obrigatório — a conta é e segue opcional
 - Publicação em loja antes do curso — fase 2
 - App Store / iOS — descartado
 - Editor visual de conteúdo — fase 3; YAML e validador resolvem

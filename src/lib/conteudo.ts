@@ -51,3 +51,32 @@ export function trilhaLiberada(
     return licoesEmOrdem(requisito).every((l) => concluidas(requisito.id, l.id))
   })
 }
+
+/** Primeira lição ainda não concluída, varrendo as trilhas liberadas em ordem. */
+export function proximaPendente(
+  concluida: (idTrilha: string, idLicao: string) => boolean,
+): { trilha: TrilhaCompleta; licao: Licao } | undefined {
+  for (const trilha of trilhas) {
+    if (!trilhaLiberada(trilha, concluida)) continue
+    for (const licao of licoesEmOrdem(trilha)) {
+      if (!concluida(trilha.id, licao.id)) return { trilha, licao }
+    }
+  }
+  return undefined
+}
+
+/** Quantas lições existem no curso inteiro, e quantas a pessoa já fez. */
+export function totalGeral(concluida: (idTrilha: string, idLicao: string) => boolean): {
+  feitas: number
+  total: number
+} {
+  let feitas = 0
+  let total = 0
+  for (const trilha of trilhas) {
+    for (const licao of licoesEmOrdem(trilha)) {
+      total++
+      if (concluida(trilha.id, licao.id)) feitas++
+    }
+  }
+  return { feitas, total }
+}

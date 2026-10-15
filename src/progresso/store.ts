@@ -164,6 +164,30 @@ async function gravar(estado: EstadoProgresso): Promise<void> {
   }
 }
 
+/**
+ * Adota o progresso que veio da conta, depois da mesclagem no servidor.
+ *
+ * As reflexões não participam: elas nunca sobem para o servidor, então o que
+ * está no aparelho é a única cópia e permanece intacto.
+ */
+export function aplicarProgressoRemoto(remoto: {
+  concluidas: Record<string, LicaoConcluida>
+  xpTotal: number
+  ofensiva: number
+  ultimoDia: string | null
+}): void {
+  const atual = useProgresso.getState()
+  const proximo: EstadoProgresso = {
+    concluidas: remoto.concluidas,
+    reflexoes: atual.reflexoes,
+    xpTotal: remoto.xpTotal,
+    ofensiva: remoto.ofensiva,
+    ultimoDia: remoto.ultimoDia,
+  }
+  useProgresso.setState(proximo)
+  void gravar(proximo)
+}
+
 /** Chamado uma vez no boot, antes da primeira pintura. */
 export async function carregarProgresso(): Promise<void> {
   try {

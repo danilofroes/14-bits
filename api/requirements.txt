@@ -1,0 +1,20 @@
+# API do 14-Bits — autenticação e sincronização de progresso.
+# Mesma stack do SALVE (Flask + Postgres), de propósito: uma stack só para
+# aprender e manter. Ver docs/PLANEJAMENTO.md §2.3.
+
+Flask==3.0.3
+Flask-SQLAlchemy==3.1.1
+Flask-Cors==5.0.0
+Flask-Limiter==3.8.0
+SQLAlchemy==2.0.41
+python-dotenv==1.0.1
+
+# Driver do Postgres (Railway). Em desenvolvimento o padrão é SQLite e este
+# pacote não chega a ser usado.
+psycopg[binary]==3.2.3
+
+# Servidor de produção (Render).
+gunicorn==23.0.0
+
+# Desenvolvimento
+pytest==8.3.4
