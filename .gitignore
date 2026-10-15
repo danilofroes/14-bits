@@ -1,0 +1,21 @@
+node_modules/
+dist/
+dist-ssr/
+coverage/
+.vite/
+*.local
+*.tsbuildinfo
+
+# gerado a partir do Zod para autocomplete do editor
+conteudo/schema/licao.schema.json
+conteudo/schema/trilha.schema.json
+
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+*.log
+npm-debug.log*

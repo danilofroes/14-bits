@@ -1,0 +1,88 @@
+id: o-que-e-um-algoritmo
+titulo: O que é um algoritmo
+objetivo: Reconhecer que um algoritmo é uma sequência de passos sem ambiguidade, e perceber por que o computador exige precisão.
+duracao_min: 5
+xp: 20
+conceitos: [algoritmo, instrucao]
+
+passos:
+  - tipo: texto
+    conteudo: |
+      Se alguém te pede uma receita de bolo, você escreve os passos em ordem:
+      bata os ovos, misture a farinha, leve ao forno.
+
+      Um **algoritmo** é exatamente isso — uma sequência de passos que resolve
+      um problema. A palavra assusta mais que a ideia.
+
+  - tipo: texto
+    conteudo: |
+      A diferença é que uma pessoa preenche as lacunas sozinha. Se a receita
+      diz "leve ao forno", você entende que é para *ligar* o forno, colocar a
+      forma *dentro* e esperar.
+
+      O computador não preenche lacuna nenhuma. Ele faz exatamente o que está
+      escrito, na ordem em que está escrito.
+
+  - tipo: quiz
+    pergunta: |
+      Um robô recebe estas instruções para atravessar a rua:
+      *"1. Atravesse. 2. Olhe para os dois lados."*
+      O que acontece?
+    alternativas:
+      - texto: Ele atravessa sem olhar, porque segue a ordem escrita
+        correta: true
+        feedback: |
+          Exatamente. A ordem dos passos **é** parte do algoritmo. Os dois
+          passos estão certos individualmente, e mesmo assim o resultado é
+          desastroso.
+      - texto: Ele entende a intenção e olha antes
+        feedback: |
+          Uma pessoa entenderia. O computador, não — ele não tem noção do
+          objetivo, só da sequência.
+      - texto: Ele avisa que a instrução está errada
+        feedback: |
+          A instrução não está *inválida*, está apenas fora de ordem. O
+          computador consegue executar, e é isso que a torna perigosa.
+
+  - tipo: destaque
+    estilo: atencao
+    conteudo: |
+      Quase todo erro de programação é isso: a instrução foi **executada
+      corretamente**, mas não era a instrução que a pessoa queria dar.
+
+      O computador quase nunca erra. Quem erra é o enunciado.
+
+  - tipo: texto
+    conteudo: |
+      Por isso um algoritmo precisa de três coisas:
+
+      Ser **ordenado** — cada passo no lugar certo. Ser **inequívoco** — sem
+      "um pouquinho de sal", sem "espere um tempo". E ser **finito** — tem que
+      terminar em algum momento.
+
+  - tipo: quiz
+    pergunta: Qual destas instruções **não** serve num algoritmo?
+    alternativas:
+      - texto: Adicione sal a gosto
+        correta: true
+        feedback: |
+          "A gosto" é ambíguo. Quanto é a gosto? A máquina precisa de um
+          número: 5 gramas, 1 colher, 2%.
+      - texto: Repita 10 vezes
+        feedback: |
+          Essa é ótima — tem um número exato e termina. É uma instrução
+          perfeitamente executável.
+      - texto: Se a temperatura passar de 38 graus, acenda a luz vermelha
+        feedback: |
+          Essa também é válida: tem uma condição clara e uma ação clara. É
+          assim que se escreve uma decisão.
+      - texto: Some 7 ao resultado anterior
+        feedback: Precisa e executável — não há como interpretar de dois jeitos.
+
+  - tipo: texto
+    conteudo: |
+      Repare que você já escreveu algoritmos a vida inteira: explicar um
+      caminho, ensinar um jogo, montar um móvel.
+
+      A diferença ao falar com uma máquina é só o nível de detalhe. E é aí que
+      entra a **lógica de programação** — que é o assunto da próxima lição.

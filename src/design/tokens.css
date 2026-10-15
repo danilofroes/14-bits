@@ -1,0 +1,197 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   14-Bits — tokens de design
+
+   A identidade vem do 14-bis: céu, latão e o tecido envernizado que cobria a
+   estrutura de bambu. Os nomes dos tokens são em português porque aparecem no
+   YAML das trilhas (ver conteudo/schema/schema.ts, campo `cor`).
+
+   Tailwind v4 emite cada token como custom property, então basta redefinir a
+   variável no bloco de tema escuro para as utilitárias acompanharem.
+   ========================================================================== */
+
+@theme {
+  /* --- neutros: papel de linho, tinta com viés azulado --- */
+  --color-papel: #f2f2ee;
+  --color-superficie: #fbfbf8;
+  --color-superficie-alt: #e9e9e3;
+  --color-linha: #dad9d2;
+  --color-linha-suave: #e6e5df;
+  --color-tinta: #16202a;
+  --color-tinta-suave: #4a5661;
+  --color-tinta-fraca: #616a72;
+
+  /* --- céu: cor primária, navegação e progresso --- */
+  --color-ceu: #1b5a87;
+  --color-ceu-forte: #12405f;
+  --color-ceu-claro: #e3edf4;
+
+  /* --- latão: XP, conquistas, os momentos de voo --- */
+  --color-latao: #8d6318;
+  --color-latao-forte: #825c15;
+  --color-latao-claro: #f5ebd6;
+
+  /* --- mata: acerto --- */
+  --color-mata: #2c6e52;
+  --color-mata-forte: #1f5039;
+  --color-mata-claro: #deede5;
+
+  /* --- terra: erro e atenção --- */
+  --color-terra: #a6431f;
+  --color-terra-forte: #7d3116;
+  --color-terra-claro: #f7e5dc;
+
+  /* --- tipografia --- */
+  --font-display: 'Bricolage Grotesque', 'Trebuchet MS', sans-serif;
+  --font-corpo:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'Segoe UI Mono', Menlo, Consolas, monospace;
+
+  /* --- ritmo --- */
+  --radius-suave: 6px;
+  --radius-cartao: 10px;
+
+  /* Alvo mínimo de toque — PLANEJAMENTO.md §6.2 */
+  --spacing-toque: 44px;
+}
+
+/* --------------------------------------------------------------------------
+   Tema escuro. Redefine só os tokens; nenhuma regra de componente vive aqui.
+   Três estados: sistema (sem marcação), escolha explícita clara, escolha
+   explícita escura.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema='claro']) {
+    --color-papel: #10161c;
+    --color-superficie: #171f26;
+    --color-superficie-alt: #1f2932;
+    --color-linha: #2c3843;
+    --color-linha-suave: #232d36;
+    --color-tinta: #e7eaed;
+    --color-tinta-suave: #aab4bd;
+    --color-tinta-fraca: #7d8892;
+
+    --color-ceu: #5aa3d4;
+    --color-ceu-forte: #8cc3e8;
+    --color-ceu-claro: #14293a;
+
+    --color-latao: #d0a247;
+    --color-latao-forte: #e6bf6d;
+    --color-latao-claro: #2c2415;
+
+    --color-mata: #56b189;
+    --color-mata-forte: #7fcaa7;
+    --color-mata-claro: #14291f;
+
+    --color-terra: #dd8058;
+    --color-terra-forte: #eda27f;
+    --color-terra-claro: #2e1a12;
+  }
+}
+
+:root[data-tema='escuro'] {
+  --color-papel: #10161c;
+  --color-superficie: #171f26;
+  --color-superficie-alt: #1f2932;
+  --color-linha: #2c3843;
+  --color-linha-suave: #232d36;
+  --color-tinta: #e7eaed;
+  --color-tinta-suave: #aab4bd;
+  --color-tinta-fraca: #7d8892;
+
+  --color-ceu: #5aa3d4;
+  --color-ceu-forte: #8cc3e8;
+  --color-ceu-claro: #14293a;
+
+  --color-latao: #d0a247;
+  --color-latao-forte: #e6bf6d;
+  --color-latao-claro: #2c2415;
+
+  --color-mata: #56b189;
+  --color-mata-forte: #7fcaa7;
+  --color-mata-claro: #14291f;
+
+  --color-terra: #dd8058;
+  --color-terra-forte: #eda27f;
+  --color-terra-claro: #2e1a12;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    /* Respeita a escala de fonte do sistema até 200% — §6.2 */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-papel);
+    color: var(--color-tinta);
+    font-family: var(--font-corpo);
+    line-height: 1.6;
+    /* Evita o "pulo" do scroll ao trocar de lição */
+    overflow-y: scroll;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  /* Foco sempre visível — o app inteiro precisa funcionar sem mouse. */
+  :focus-visible {
+    outline: 2px solid var(--color-ceu);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  button {
+    font-family: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Utilitárias próprias
+   -------------------------------------------------------------------------- */
+
+@layer utilities {
+  /* Conteúdo só para leitor de tela. Todo simulador depende disto. */
+  .apenas-leitor {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Largura de leitura confortável para o texto das lições. */
+  .medida {
+    max-width: 62ch;
+  }
+}

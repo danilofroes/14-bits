@@ -1,0 +1,17 @@
+id: como-o-computador-pensa
+titulo: Como o computador pensa
+subtitulo: Antes de ensinar uma máquina, entenda como ela raciocina
+icone: trilha
+cor: ceu
+ordem: 1
+descricao: |
+  Todo mundo usa computador, quase ninguém sabe o que acontece lá dentro.
+  Esta trilha desmonta a caixa preta: liga e desliga, verdadeiro e falso,
+  passo a passo. Sem nenhuma linha de código.
+
+modulos:
+  - id: o-comeco
+    titulo: O começo de tudo
+    licoes:
+      - por-que-14-bits
+      - o-que-e-um-algoritmo
