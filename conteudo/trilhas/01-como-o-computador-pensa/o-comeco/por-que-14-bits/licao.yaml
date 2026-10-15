@@ -1,0 +1,133 @@
+id: por-que-14-bits
+titulo: Por que 14 bits?
+objetivo: Entender que qualquer informação num computador é feita de liga e desliga, e que cada bit a mais dobra o que dá para representar.
+duracao_min: 6
+xp: 20
+conceitos: [bit, binario]
+
+passos:
+  - tipo: texto
+    conteudo: |
+      O nome deste app tem duas histórias. Uma é brasileira e tem mais de
+      cem anos. A outra explica como qualquer computador funciona.
+
+      Vamos pelas duas.
+
+  - tipo: destaque
+    estilo: curiosidade
+    conteudo: |
+      Em 23 de outubro de 1906, em Paris, **Alberto Santos Dumont** decolou
+      com o **14-bis** e voou 60 metros a cerca de 3 metros do chão.
+
+      Foi o primeiro voo público de um avião, registrado por testemunhas e
+      autoridades. Sessenta metros. Menos que um quarteirão. E mudou a ideia
+      que o mundo tinha do que era possível.
+
+  - tipo: texto
+    conteudo: |
+      Sessenta metros não parece muita coisa. Mas ninguém começa atravessando
+      o oceano — começa saindo do chão.
+
+      É por isso que o app se chama assim. Só que *bits*, com t, é a segunda
+      história.
+
+  - tipo: texto
+    conteudo: |
+      Um computador não entende palavras, números ou imagens. Ele entende uma
+      coisa só: **tem corrente** ou **não tem corrente**. Ligado ou desligado.
+
+      Cada uma dessas respostinhas de sim-ou-não é um **bit**.
+
+  - tipo: quiz
+    pergunta: Com **um único bit**, quantas coisas diferentes dá para representar?
+    alternativas:
+      - texto: Duas
+        correta: true
+        feedback: |
+          Isso. Um bit só tem dois estados possíveis: ligado ou desligado.
+          Já dá para representar sim/não, verdadeiro/falso, tem/não tem.
+      - texto: Uma
+        feedback: |
+          Se fosse uma só, o bit não guardaria informação nenhuma — seria
+          sempre a mesma resposta. A graça é ele poder estar em dois estados.
+      - texto: Dez
+        feedback: |
+          Dez é quantos dígitos *nós* usamos (0 a 9). O computador usa dois.
+      - texto: Infinitas
+        feedback: |
+          Com um bit, não. Mas você está no caminho certo ao pensar que
+          juntando bits dá para chegar longe.
+
+  - tipo: texto
+    conteudo: |
+      Agora junte **dois** bits. Cada um pode estar ligado ou desligado, então
+      as combinações são: desligado-desligado, desligado-ligado,
+      ligado-desligado e ligado-ligado.
+
+      Quatro combinações. Com três bits, oito. Com quatro, dezesseis.
+
+  - tipo: destaque
+    estilo: dica
+    conteudo: |
+      Percebeu o padrão? **Cada bit que você acrescenta dobra o total.**
+
+      Não é somar — é dobrar. É por isso que os números crescem tão rápido.
+
+  - tipo: quiz
+    pergunta: Seguindo essa lógica, quantas combinações dão **3 bits**?
+    alternativas:
+      - texto: '8'
+        correta: true
+        feedback: 4 combinações com 2 bits, dobrou para 8 com 3 bits.
+      - texto: '6'
+        feedback: |
+          Seria 6 se a gente estivesse somando 2 a cada bit. Mas a conta é
+          dobrar: 2, 4, 8, 16...
+      - texto: '3'
+        feedback: 3 é a quantidade de bits, não de combinações que eles formam.
+      - texto: '9'
+        feedback: |
+          Quase a mesma ideia, mas 3 × 3 não é a conta. Cada bit **dobra** o
+          que veio antes: 2, 4, 8.
+
+  - tipo: texto
+    conteudo: |
+      E com **14 bits**?
+
+      Dobrando quatorze vezes, chegamos em **16.384** combinações diferentes.
+      Com catorze respostinhas de sim ou não, dá para representar mais de
+      dezesseis mil coisas distintas.
+
+  - tipo: destaque
+    estilo: dica
+    conteudo: |
+      Guarde esta ideia, porque ela volta em todas as trilhas:
+
+      **Toda foto, música, mensagem e modelo de inteligência artificial é,
+      lá no fundo, um monte de liga e desliga.** A diferença está em como
+      esses bits são organizados e interpretados.
+
+  - tipo: quiz
+    pergunta: Qual afirmação está correta?
+    alternativas:
+      - texto: Cada bit acrescentado dobra a quantidade de combinações possíveis
+        correta: true
+        feedback: |
+          Exatamente. É esse crescimento explosivo que permite representar
+          coisas complexas com um alfabeto de apenas dois símbolos.
+      - texto: Computadores usam dez dígitos, como nós
+        feedback: |
+          Nós usamos dez. O computador usa dois, porque é fácil construir um
+          circuito que só precisa distinguir "tem corrente" de "não tem".
+      - texto: Bits servem só para números, não para imagens ou som
+        feedback: |
+          Serve para tudo. O que muda é a regra de interpretação daqueles
+          bits — a mesma sequência pode virar um número ou um pedaço de som.
+
+  - tipo: texto
+    conteudo: |
+      Você acabou de sair do chão.
+
+      Na próxima lição vamos ver como esses bits viram **instruções** — ou
+      seja, como se explica uma tarefa para uma máquina que só entende
+      ligado e desligado.

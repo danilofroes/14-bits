@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main, setup]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verificar:
+    name: Lint, tipos, conteúdo e testes
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Formatação
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tipos
+        run: npx tsc --noEmit
+
+      # Conteúdo inválido não passa daqui — é o que impede uma lição quebrada
+      # de chegar na frente da turma.
+      - name: Validar conteúdo
+        run: npm run validar
+
+      - name: Testes
+        run: npm run test
+
+      - name: Build
+        run: npx vite build
+
+      - name: Conferir orçamento de JS
+        run: |
+          TOTAL=$(find dist/assets -name '*.js' -exec cat {} + | gzip -c | wc -c)
+          LIMITE=256000
+          echo "JS comprimido: ${TOTAL} bytes (limite ${LIMITE})"
+          if [ "$TOTAL" -gt "$LIMITE" ]; then
+            echo "::error::Orçamento de performance estourado — PLANEJAMENTO.md §6.2"
+            exit 1
+          fi

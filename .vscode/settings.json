@@ -1,0 +1,16 @@
+{
+  "// autocomplete das lições": "Os arquivos .schema.json são gerados por `npm run validar`",
+  "yaml.schemas": {
+    "./conteudo/schema/licao.schema.json": "conteudo/trilhas/**/licao.yaml",
+    "./conteudo/schema/trilha.schema.json": "conteudo/trilhas/**/trilha.yaml"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml",
+    "editor.tabSize": 2
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}
