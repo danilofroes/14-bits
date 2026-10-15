@@ -43,13 +43,22 @@ Trilha  →  Módulo  →  Lição  →  Passo
 
 Uma lição tem de 6 a 12 passos e dura de 5 a 8 minutos. Se passar de 12 passos, o validador avisa: é hora de quebrar em duas.
 
-Cada passo é de um tipo. Hoje existem três:
+Cada passo é de um tipo. Hoje existem oito:
 
-| Tipo       | Para quê                                                    |
-| ---------- | ----------------------------------------------------------- |
-| `texto`    | Explicar. Aceita `**negrito**`, `*itálico*`, `` `código` `` |
-| `destaque` | Caixa de `dica`, `atencao` ou `curiosidade`                 |
-| `quiz`     | Múltipla escolha, com uma ou várias respostas certas        |
+| Tipo          | Para quê                                                    |
+| ------------- | ----------------------------------------------------------- |
+| `texto`       | Explicar. Aceita `**negrito**`, `*itálico*`, `` `código` `` |
+| `destaque`    | Caixa de `dica`, `atencao` ou `curiosidade`                 |
+| `quiz`        | Múltipla escolha, com uma ou várias respostas certas        |
+| `lacuna`      | Completar frases. O banco de palavras se monta sozinho      |
+| `ordenar`     | Colocar passos na ordem certa — ideal para algoritmo        |
+| `associar`    | Ligar cada termo à sua definição                            |
+| `classificar` | Separar itens em categorias                                 |
+| `reflexao`    | Pergunta aberta, sem correção, guardada no aparelho         |
+
+Nos quatro exercícios de colocação o gesto é sempre o mesmo: **toque para
+escolher, toque para colocar**. Nada é arrastado — arrastar não funciona bem
+com o dedo, nem com leitor de tela, nem com teclado.
 
 Exemplo mínimo:
 
@@ -75,6 +84,21 @@ passos:
         feedback: |
           Explique por que essa parece certa e onde escorrega.
           O feedback do erro é onde o ensino acontece.
+
+  - tipo: lacuna
+    # As respostas vão entre chaves duplas, dentro do próprio texto.
+    # O banco de palavras é montado sozinho com elas mais os distratores,
+    # então é impossível escrever uma resposta que não aparece nas opções.
+    enunciado: O plano escrito em português antes de programar é o {{pseudocódigo}}.
+    distratores: [compilador]
+
+  - tipo: ordenar
+    # A ordem escrita aqui é a certa. Na tela aparece embaralhada.
+    instrucao: Coloque os passos na ordem que funciona.
+    itens:
+      - Primeiro passo
+      - Segundo passo
+      - Terceiro passo
 ```
 
 O catálogo completo de tipos de bloco e o formato de cada campo estão em [docs/ARQUITETURA-CONTEUDO.md](docs/ARQUITETURA-CONTEUDO.md).

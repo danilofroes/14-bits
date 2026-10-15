@@ -126,6 +126,11 @@
   html {
     /* Respeita a escala de fonte do sistema até 200% — §6.2 */
     -webkit-text-size-adjust: 100%;
+    /* Reserva o espaço da barra de rolagem para a página não "pular" de
+       largura entre uma lição curta e uma longa. Faz o que um
+       `overflow-y: scroll` no body faria, sem transformar o body num
+       contêiner de rolagem que confunde o `scrollIntoView`. */
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -133,8 +138,6 @@
     color: var(--color-tinta);
     font-family: var(--font-corpo);
     line-height: 1.6;
-    /* Evita o "pulo" do scroll ao trocar de lição */
-    overflow-y: scroll;
   }
 
   h1,

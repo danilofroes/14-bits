@@ -20,6 +20,12 @@ export type LicaoConcluida = {
 export type EstadoProgresso = {
   /** Chave: `${idTrilha}/${idLicao}` */
   concluidas: Record<string, LicaoConcluida>
+  /**
+   * Respostas das perguntas abertas. Chave: `${idTrilha}/${idLicao}#${passo}`.
+   * Ficam separadas das lições concluídas porque sobrevivem a refazer a lição —
+   * a pessoa deve reencontrar o que escreveu.
+   */
+  reflexoes: Record<string, string>
   xpTotal: number
   ofensiva: number
   /** Último dia em que a pessoa concluiu alguma lição. */
@@ -30,11 +36,14 @@ type Acoes = {
   concluirLicao: (idTrilha: string, idLicao: string, xp: number) => void
   estaConcluida: (idTrilha: string, idLicao: string) => boolean
   xpDaTrilha: (idTrilha: string) => number
+  guardarReflexao: (idTrilha: string, idLicao: string, passo: number, texto: string) => void
+  reflexaoSalva: (idTrilha: string, idLicao: string, passo: number) => string
   zerar: () => void
 }
 
 const ESTADO_INICIAL: EstadoProgresso = {
   concluidas: {},
+  reflexoes: {},
   xpTotal: 0,
   ofensiva: 0,
   ultimoDia: null,
@@ -42,6 +51,10 @@ const ESTADO_INICIAL: EstadoProgresso = {
 
 export function chaveLicao(idTrilha: string, idLicao: string): string {
   return `${idTrilha}/${idLicao}`
+}
+
+export function chaveReflexao(idTrilha: string, idLicao: string, passo: number): string {
+  return `${chaveLicao(idTrilha, idLicao)}#${passo}`
 }
 
 /** Data local no formato YYYY-MM-DD. Usa horário local, não UTC: a ofensiva
@@ -89,6 +102,7 @@ export const useProgresso = create<EstadoProgresso & Acoes>((set, get) => ({
 
     const dia = hoje()
     const proximo: EstadoProgresso = {
+      ...estadoPuro(estado),
       concluidas: { ...estado.concluidas, [chave]: { xp, em: dia } },
       xpTotal: estado.xpTotal + xp,
       ofensiva: proximaOfensiva(estado.ofensiva, estado.ultimoDia, dia),
@@ -110,11 +124,36 @@ export const useProgresso = create<EstadoProgresso & Acoes>((set, get) => ({
       .reduce((soma, [, valor]) => soma + valor.xp, 0)
   },
 
+  guardarReflexao(idTrilha, idLicao, passo, texto) {
+    const estado = get()
+    const proximo: EstadoProgresso = {
+      ...estadoPuro(estado),
+      reflexoes: { ...estado.reflexoes, [chaveReflexao(idTrilha, idLicao, passo)]: texto },
+    }
+    set(proximo)
+    void gravar(proximo)
+  },
+
+  reflexaoSalva(idTrilha, idLicao, passo) {
+    return get().reflexoes[chaveReflexao(idTrilha, idLicao, passo)] ?? ''
+  },
+
   zerar() {
     set(ESTADO_INICIAL)
     void gravar(ESTADO_INICIAL)
   },
 }))
+
+/** Separa os dados das ações — só os dados vão para o IndexedDB. */
+function estadoPuro(estado: EstadoProgresso): EstadoProgresso {
+  return {
+    concluidas: estado.concluidas,
+    reflexoes: estado.reflexoes,
+    xpTotal: estado.xpTotal,
+    ofensiva: estado.ofensiva,
+    ultimoDia: estado.ultimoDia,
+  }
+}
 
 async function gravar(estado: EstadoProgresso): Promise<void> {
   try {
@@ -132,6 +171,7 @@ export async function carregarProgresso(): Promise<void> {
     if (salvo) {
       useProgresso.setState({
         concluidas: salvo.concluidas ?? {},
+        reflexoes: salvo.reflexoes ?? {},
         xpTotal: salvo.xpTotal ?? 0,
         ofensiva: salvo.ofensiva ?? 0,
         ultimoDia: salvo.ultimoDia ?? null,

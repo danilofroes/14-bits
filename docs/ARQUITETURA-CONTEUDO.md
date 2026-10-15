@@ -122,7 +122,7 @@ passos:
   - tipo: simulador
     widget: classificador-fronteira
     titulo: Trace a separação
-    instrucao: Arraste a linha para separar os pontos azuis dos laranjas.
+    instrucao: Mova a linha para separar os pontos azuis dos laranjas.
     params:
       dataset: duas-nuvens
       mostrar_erros: true
@@ -132,7 +132,7 @@ passos:
     pergunta_apos: Foi possível acertar 100%? Por que não?
 
   - tipo: classificar
-    instrucao: Arraste cada problema para a caixa certa.
+    instrucao: Separe cada problema na caixa certa.
     categorias: [Classificação, Regressão]
     itens:
       - texto: Este exame deu positivo ou negativo?
@@ -176,24 +176,30 @@ Isso é uma lição inteira. Sem uma linha de código.
 
 ### 4.2. Verificação
 
-| Tipo               | Uso                                    | Por que existe                                            |
-| ------------------ | -------------------------------------- | --------------------------------------------------------- |
-| `quiz`             | Múltipla escolha, 1 ou várias corretas | Verificação básica                                        |
-| `verdadeiro-falso` | Afirmação para julgar                  | Rápido, bom para desfazer mito                            |
-| `lacuna`           | Preencher lacunas a partir de um banco | Fixa vocabulário técnico                                  |
-| `ordenar`          | Colocar passos na ordem certa          | **Ideal para algoritmo e pseudocódigo**                   |
-| `associar`         | Ligar pares termo ↔ definição          | Glossário ativo                                           |
-| `classificar`      | Arrastar itens para categorias         | **Ideal para "isto é classificação ou regressão?"**       |
-| `montar`           | Montar pseudocódigo a partir de blocos | Estilo Mimo, sem exigir digitar código                    |
-| `cenario`          | Caso com decisões encadeadas           | Aprendizagem Baseada em Problemas (PBL, §4.3.3 do edital) |
+| Tipo               | Estado | Uso                                    | Por que existe                                            |
+| ------------------ | ------ | -------------------------------------- | --------------------------------------------------------- |
+| `quiz`             | pronto | Múltipla escolha, 1 ou várias corretas | Verificação básica                                        |
+| `lacuna`           | pronto | Preencher lacunas a partir de um banco | Fixa vocabulário técnico                                  |
+| `ordenar`          | pronto | Colocar passos na ordem certa          | **Ideal para algoritmo e pseudocódigo**                   |
+| `associar`         | pronto | Ligar pares termo ↔ definição          | Glossário ativo                                           |
+| `classificar`      | pronto | Separar itens em categorias            | **Ideal para "isto é classificação ou regressão?"**       |
+| `verdadeiro-falso` | futuro | Afirmação para julgar                  | Rápido, bom para desfazer mito                            |
+| `montar`           | futuro | Montar pseudocódigo a partir de blocos | Estilo Mimo, sem exigir digitar código                    |
+| `cenario`          | futuro | Caso com decisões encadeadas           | Aprendizagem Baseada em Problemas (PBL, §4.3.3 do edital) |
+
+> **Nada é arrastado.** Os quatro exercícios de colocação usam o mesmo gesto:
+> **toque para escolher, toque para colocar**. Arrastar com o dedo numa tela
+> pequena é impreciso, não funciona com leitor de tela e é inoperável por
+> teclado — e o público está em celular de entrada, com os computadores da
+> Nave como alternativa. Ver `src/blocos/pecas.tsx`.
 
 ### 4.3. Interação e abertura
 
-| Tipo        | Uso                                                                         |
-| ----------- | --------------------------------------------------------------------------- |
-| `simulador` | Widget interativo do catálogo (§5)                                          |
-| `reflexao`  | Resposta aberta, salva localmente, sem correção                             |
-| `enquete`   | Pergunta rápida de turma — resultado agregado na tela do professor (fase 2) |
+| Tipo        | Estado | Uso                                                                         |
+| ----------- | ------ | --------------------------------------------------------------------------- |
+| `reflexao`  | pronto | Resposta aberta, salva localmente, sem correção                             |
+| `simulador` | futuro | Widget interativo do catálogo (§5)                                          |
+| `enquete`   | futuro | Pergunta rápida de turma — resultado agregado na tela do professor (fase 2) |
 
 ### 4.4. Campos comuns a todos os blocos
 
@@ -314,16 +320,16 @@ Essa validação é o que permite escrever conteúdo rápido sem medo — o erro
 
 Nem tudo precisa existir no dia 1. Ordem por retorno sobre esforço:
 
-**Onda 1 (semana 2) — destrava 80% do conteúdo:**
+**Onda 1 — pronta:**
 `texto`, `destaque`, `quiz`, `verdadeiro-falso`, `imagem`
 
-**Onda 2 (semana 2–3) — dá variedade:**
+**Onda 2 — pronta:**
 `lacuna`, `ordenar`, `associar`, `classificar`, `reflexao`
 
-**Onda 3 (semana 3–4) — dá alma:**
+**Onda 3 — próxima, é o que diferencia o app de um formulário de quiz:**
 `simulador` + os 4 primeiros widgets, `comparacao`
 
-**Onda 4 (se houver tempo):**
+**Onda 4 — depois:**
 `montar`, `cenario`, `linha-do-tempo`, `enquete`
 
 **Marco de validação:** ao fim da Onda 1, escrever uma lição real de ponta a ponta e cronometrar. Se passar de 30 minutos, pare e conserte a ferramenta antes de escrever mais conteúdo.

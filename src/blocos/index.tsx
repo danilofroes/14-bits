@@ -15,12 +15,22 @@ import type { PropsBloco } from './tipos'
 import { BlocoTexto } from './BlocoTexto'
 import { BlocoDestaque } from './BlocoDestaque'
 import { BlocoQuiz } from './BlocoQuiz'
+import { BlocoLacuna } from './BlocoLacuna'
+import { BlocoOrdenar } from './BlocoOrdenar'
+import { BlocoAssociar } from './BlocoAssociar'
+import { BlocoClassificar } from './BlocoClassificar'
+import { BlocoReflexao } from './BlocoReflexao'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const REGISTRY: Record<Passo['tipo'], ComponentType<PropsBloco<any>>> = {
   texto: BlocoTexto,
   destaque: BlocoDestaque,
   quiz: BlocoQuiz,
+  lacuna: BlocoLacuna,
+  ordenar: BlocoOrdenar,
+  associar: BlocoAssociar,
+  classificar: BlocoClassificar,
+  reflexao: BlocoReflexao,
 }
 
 export function Bloco(props: PropsBloco) {

@@ -1,0 +1,104 @@
+id: passo-a-passo
+titulo: Escrevendo o passo a passo
+objetivo: Montar um algoritmo em pseudocódigo e reconhecer as três estruturas que aparecem em qualquer programa.
+duracao_min: 8
+xp: 25
+conceitos: [pseudocodigo, variavel, condicional, repeticao]
+
+passos:
+  - tipo: texto
+    conteudo: |
+      Antes de escrever um programa de verdade, quase todo mundo escreve o
+      plano em português mesmo. Isso tem nome: **pseudocódigo**.
+
+      Não é uma linguagem de programação. É você explicando o passo a passo
+      com cuidado suficiente para não sobrar dúvida — e, de quebra, sem ter
+      que decorar a pontuação de nenhuma linguagem.
+
+  - tipo: texto
+    conteudo: |
+      Quase tudo que um programa faz cabe em três estruturas. Você vai
+      reconhecer todas as três:
+
+      Guardar um valor para usar depois. Decidir entre caminhos. Repetir
+      enquanto algo for verdade.
+
+  - tipo: associar
+    instrucao: Ligue cada estrutura ao que ela faz.
+    pares:
+      - termo: variável
+        definicao: Guarda um valor com um nome, para usar depois
+      - termo: condicional
+        definicao: Escolhe entre dois caminhos dependendo de uma condição
+      - termo: repetição
+        definicao: Executa o mesmo trecho várias vezes
+      - termo: entrada
+        definicao: Recebe um dado que vem de fora do programa
+
+  - tipo: texto
+    conteudo: |
+      Vamos escrever um algoritmo de verdade. O problema: **achar a maior
+      temperatura de uma semana** de medições.
+
+      Pense em como você faria com um papel na mão, olhando os números um
+      por um. É exatamente isso que a máquina vai fazer.
+
+  - tipo: ordenar
+    instrucao: Coloque os passos na ordem que funciona.
+    itens:
+      - Guarde a primeira temperatura como sendo a maior até agora
+      - Pegue a próxima temperatura da lista
+      - Se ela for maior que a maior até agora, substitua
+      - Repita enquanto ainda houver temperaturas na lista
+      - Mostre a maior até agora
+
+  - tipo: destaque
+    estilo: dica
+    conteudo: |
+      Olhe o primeiro passo com atenção. Ele parece bobo, mas é o que impede
+      o erro mais comum: começar comparando com o nada.
+
+      Se você começasse com "a maior é zero", uma semana inteira de
+      temperaturas negativas daria a resposta errada.
+
+  - tipo: quiz
+    pergunta: Por que o passo "repita enquanto ainda houver temperaturas" precisa existir?
+    alternativas:
+      - texto: Porque sem ele o algoritmo olharia só a segunda temperatura e pararia
+        correta: true
+        feedback: |
+          Isso. A repetição é o que transforma "comparar duas" em "comparar
+          sete" — ou setecentas, sem mudar uma linha.
+      - texto: Porque o computador é lento e precisa de várias passadas
+        feedback: |
+          Velocidade não tem a ver. O problema é de lógica: sem repetir, a
+          maior parte da lista nunca seria olhada.
+      - texto: Porque toda lista precisa ser percorrida duas vezes
+        feedback: |
+          Não precisa. Esse algoritmo resolve numa passada só — e é por isso
+          que ele é bom.
+
+  - tipo: lacuna
+    enunciado: |
+      Escrever o plano em português antes de programar chama-se {{pseudocódigo}}.
+      O nome que guarda um valor para usar depois é uma {{variável}}, e o
+      trecho que decide entre dois caminhos é um {{condicional}}.
+    distratores: [compilador, repetição]
+
+  - tipo: texto
+    conteudo: |
+      Repare no que acabou de acontecer: você montou um algoritmo sem escrever
+      uma linha de código, e ele está correto.
+
+      É por isso que este curso quase não usa linguagem de programação. O
+      difícil nunca foi a pontuação — é organizar o pensamento.
+
+  - tipo: reflexao
+    pergunta: |
+      Pense numa tarefa que você faz sempre, quase no automático: pegar um
+      ônibus, organizar o dia, conferir uma conta. Escreva os passos dela
+      como se fosse explicar para alguém que nunca fez.
+    dica: |
+      Não existe resposta errada. Se travar em algum ponto, é justamente ali
+      que o computador também travaria — e isso é a coisa mais útil que você
+      pode descobrir hoje. Leve sua resposta para a aula.

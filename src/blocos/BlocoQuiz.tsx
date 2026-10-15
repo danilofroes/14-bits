@@ -1,33 +1,16 @@
 import { useMemo } from 'react'
 import type { PassoQuiz } from '@conteudo/schema/schema.ts'
 import type { PropsBloco } from './tipos'
+import { embaralharEstavel } from '@/engine/motor'
 import { Marcacao, MarcacaoInline } from '@/lib/marcacao'
 import { IconeCerto, IconeErrado } from '@/design/icones'
-
-/**
- * Embaralhamento estável: a ordem muda entre lições, mas não a cada
- * renderização — caso contrário as alternativas dançariam sob o dedo da pessoa.
- */
-function embaralharEstavel(tamanho: number, semente: number): number[] {
-  const indices = Array.from({ length: tamanho }, (_, i) => i)
-  let estado = semente
-  for (let i = tamanho - 1; i > 0; i--) {
-    estado = (estado * 1664525 + 1013904223) % 4294967296
-    const j = estado % (i + 1)
-    const a = indices[i]!
-    const b = indices[j]!
-    indices[i] = b
-    indices[j] = a
-  }
-  return indices
-}
 
 export function BlocoQuiz({
   passo,
   indice,
   resposta,
-  selecao,
-  aoSelecionar,
+  escolhas,
+  aoEscolher,
   ativo,
 }: PropsBloco<PassoQuiz>) {
   const multipla = passo.alternativas.filter((a) => a.correta).length > 1
@@ -47,13 +30,13 @@ export function BlocoQuiz({
   function alternar(indiceAlternativa: number) {
     if (!ativo || respondido) return
     if (multipla) {
-      aoSelecionar(
-        selecao.includes(indiceAlternativa)
-          ? selecao.filter((i) => i !== indiceAlternativa)
-          : [...selecao, indiceAlternativa],
+      aoEscolher(
+        escolhas.includes(indiceAlternativa)
+          ? escolhas.filter((i) => i !== indiceAlternativa)
+          : [...escolhas, indiceAlternativa],
       )
     } else {
-      aoSelecionar([indiceAlternativa])
+      aoEscolher([indiceAlternativa])
     }
   }
 
@@ -70,7 +53,7 @@ export function BlocoQuiz({
         <div className="mt-3 flex flex-col gap-2">
           {ordem.map((indiceAlternativa) => {
             const alternativa = passo.alternativas[indiceAlternativa]!
-            const escolhida = selecao.includes(indiceAlternativa)
+            const escolhida = escolhas.includes(indiceAlternativa)
             const mostrarComoCerta = respondido && alternativa.correta
             const mostrarComoErrada = respondido && escolhida && !alternativa.correta
 

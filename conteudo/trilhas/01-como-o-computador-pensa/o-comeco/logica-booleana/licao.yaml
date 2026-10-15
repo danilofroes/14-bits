@@ -1,0 +1,123 @@
+id: logica-booleana
+titulo: Verdadeiro e falso
+objetivo: Combinar condições com E, OU e NÃO, e prever o resultado de uma combinação.
+duracao_min: 7
+xp: 25
+conceitos: [booleano, condicao, operador-logico]
+
+passos:
+  - tipo: texto
+    conteudo: |
+      Na lição passada você viu que o computador só entende ligado e desligado.
+      Quando esses dois estados viram uma afirmação sobre o mundo, a gente
+      chama de **verdadeiro** e **falso**.
+
+      Está chovendo? Verdadeiro. A temperatura passou de 30 graus? Falso.
+      Pronto: o computador já consegue trabalhar.
+
+  - tipo: texto
+    conteudo: |
+      O interessante é combinar. Com três palavrinhas dá para montar qualquer
+      decisão que existe num programa:
+
+      **E** exige as duas coisas. **OU** se contenta com uma. **NÃO** inverte.
+
+  - tipo: destaque
+    estilo: dica
+    conteudo: |
+      Repare que é o mesmo português de sempre. "Eu saio se parar de chover
+      **e** eu terminar o trabalho" — você já usa isso o dia todo, sem chamar
+      de operador lógico.
+
+  - tipo: texto
+    conteudo: |
+      Vamos fixar dois fatos de hoje e manter eles pelo resto da lição:
+
+      **Hoje choveu** — isso é *verdadeiro*.
+      **Hoje fez frio** — isso é *falso*.
+
+  - tipo: classificar
+    instrucao: Com esses dois fatos, cada combinação abaixo dá verdadeiro ou falso?
+    categorias: [Verdadeiro, Falso]
+    itens:
+      - texto: choveu OU fez frio
+        categoria: Verdadeiro
+      - texto: choveu E fez frio
+        categoria: Falso
+      - texto: NÃO fez frio
+        categoria: Verdadeiro
+      - texto: NÃO choveu
+        categoria: Falso
+      - texto: choveu E NÃO fez frio
+        categoria: Verdadeiro
+
+  - tipo: destaque
+    estilo: atencao
+    conteudo: |
+      O **OU** do computador não é o "ou" de escolha do dia a dia.
+
+      Quando alguém pergunta "você quer café ou suco?", está pedindo para
+      escolher um. Para o computador, `café OU suco` é verdadeiro se você
+      aceitar café, se aceitar suco, **e também se aceitar os dois**.
+
+  - tipo: quiz
+    pergunta: Uma porta abre com `crachá válido E senha correta`. Alguém com crachá válido e senha errada consegue entrar?
+    alternativas:
+      - texto: Não, porque o E exige que as duas coisas sejam verdadeiras
+        correta: true
+        feedback: |
+          Isso. Basta uma das duas falhar e o resultado inteiro vira falso.
+          É por isso que o **E** é usado quando segurança importa.
+      - texto: Sim, porque o crachá já é suficiente
+        feedback: |
+          Seria assim com **OU**. Com **E**, as duas condições precisam valer
+          ao mesmo tempo.
+      - texto: Depende da ordem em que foram escritas
+        feedback: |
+          A ordem não muda nada aqui. `A E B` dá o mesmo resultado que `B E A`.
+
+  - tipo: lacuna
+    enunciado: |
+      No SALVE, um alerta de dengue só faz sentido quando a chuva acumulou
+      {{E}} a temperatura subiu — as duas coisas juntas criam o criadouro.
+      Já o aviso para a equipe é disparado se o risco é alto {{OU}} se a
+      clínica já está lotada, porque qualquer um dos dois problemas basta.
+    distratores: [NÃO]
+
+  - tipo: texto
+    conteudo: |
+      Essa é, literalmente, a lógica que decide se um alerta sai ou não no
+      sistema que deu origem a este curso.
+
+      Não tem mágica: tem chuva acumulada, temperatura, e três palavrinhas.
+
+  - tipo: quiz
+    pergunta: |
+      Um sistema avisa quando `NÃO (estoque baixo OU equipe reduzida)` é falso.
+      Em que situação o aviso aparece?
+    alternativas:
+      - texto: Quando o estoque está baixo, quando a equipe está reduzida, ou ambos
+        correta: true
+        feedback: |
+          Exato. Se qualquer um dos dois problemas existe, o `OU` vira
+          verdadeiro, o `NÃO` vira falso — e o aviso dispara. Duas inversões
+          seguidas confundem, e é por isso que programadores evitam escrever
+          assim.
+      - texto: Só quando os dois problemas acontecem juntos
+        feedback: |
+          Isso descreveria um `E` no lugar do `OU`. Aqui, um problema só já
+          é suficiente.
+      - texto: Quando está tudo normal
+        feedback: |
+          Aí o `OU` seria falso e o `NÃO` verdadeiro — ou seja, o aviso
+          ficaria quieto, que é o contrário do enunciado.
+
+  - tipo: destaque
+    estilo: dica
+    conteudo: |
+      Guarde isto: **toda decisão de computador, por mais complexa que pareça,
+      é uma pilha de verdadeiro e falso combinados com E, OU e NÃO.**
+
+      Inclusive as de inteligência artificial — só que lá embaixo tem muito
+      mais delas, e quem decide como combinar é a própria máquina. É para lá
+      que vamos.

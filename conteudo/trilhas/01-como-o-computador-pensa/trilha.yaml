@@ -15,3 +15,8 @@ modulos:
     licoes:
       - por-que-14-bits
       - o-que-e-um-algoritmo
+      - logica-booleana
+  - id: escrevendo
+    titulo: Escrevendo para a máquina
+    licoes:
+      - passo-a-passo

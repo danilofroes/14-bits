@@ -8,6 +8,7 @@
 
 import { fileURLToPath, URL } from 'node:url'
 import { writeFileSync } from 'node:fs'
+import { gzipSync } from 'node:zlib'
 import { join } from 'node:path'
 import { z } from 'zod'
 import { carregarConteudo } from '../conteudo/schema/carregar.ts'
@@ -65,10 +66,37 @@ const paraJson = (esquema: z.ZodType) =>
 writeFileSync(join(raiz, 'conteudo/schema/licao.schema.json'), paraJson(licao))
 writeFileSync(join(raiz, 'conteudo/schema/trilha.schema.json'), paraJson(trilha))
 
+/* --- peso do conteúdo --------------------------------------------------- */
+/**
+ * Hoje o conteúdo inteiro viaja dentro do bundle principal: quem abre o app
+ * baixa todas as lições antes de ver a primeira tela. Isso é aceitável
+ * enquanto o conteúdo é pequeno, e deixa de ser quando cresce.
+ *
+ * Em vez de refatorar cedo demais, este aviso marca o ponto de virada. Ao
+ * passar do limite, a saída é dividir o conteúdo por trilha e carregar sob
+ * demanda — o índice (títulos e durações) fica no bundle, os passos viram
+ * pedaço separado.
+ */
+const LIMITE_CONTEUDO_GZIP = 40 * 1024
+
+const pesoGzip = gzipSync(JSON.stringify(conteudo.trilhas)).length
+const pesoFormatado = `${(pesoGzip / 1024).toFixed(1)} KB`
+
+if (pesoGzip > LIMITE_CONTEUDO_GZIP) {
+  console.log(
+    cor.amarelo('aviso') +
+      `  conteúdo em ${pesoFormatado} comprimidos, acima do limite de ` +
+      `${(LIMITE_CONTEUDO_GZIP / 1024).toFixed(0)} KB.\n` +
+      '       Hora de carregar as trilhas sob demanda em vez de embutir tudo\n' +
+      '       no bundle principal. Ver o comentário em scripts/validar-conteudo.ts.\n',
+  )
+}
+
 console.log(
   cor.verde('conteudo ok') +
     cor.fraco(
       `  ${conteudo.trilhas.length} trilha(s) · ${totalLicoes} lição(ões) · ${totalPassos} passo(s)` +
+        ` · ${pesoFormatado} gzip` +
         (avisos.length > 0 ? ` · ${avisos.length} aviso(s)` : ''),
     ),
 )

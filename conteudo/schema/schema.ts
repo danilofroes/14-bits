@@ -63,7 +63,121 @@ const passoQuiz = z
     { message: 'quiz com alternativas duplicadas', path: ['alternativas'] },
   )
 
-export const passo = z.discriminatedUnion('tipo', [passoTexto, passoDestaque]).or(passoQuiz)
+/* --- lacuna --------------------------------------------------------------- */
+
+/** Marcação das lacunas no enunciado: `{{resposta}}`. */
+export const MARCA_LACUNA = /\{\{([^{}]+)\}\}/g
+
+/** Extrai as respostas na ordem em que aparecem no enunciado. */
+export function respostasDaLacuna(enunciado: string): string[] {
+  return [...enunciado.matchAll(MARCA_LACUNA)].map((m) => m[1]!.trim())
+}
+
+const passoLacuna = z
+  .object({
+    ...camposComuns,
+    tipo: z.literal('lacuna'),
+    /** As lacunas são escritas direto no texto: `chamamos de {{classificação}}`. */
+    enunciado: z.string().min(1),
+    /**
+     * Palavras erradas que entram no banco junto das respostas. O banco é
+     * montado sozinho — assim é impossível escrever uma resposta que não
+     * existe entre as opções.
+     */
+    distratores: z.array(z.string().min(1)).default([]),
+  })
+  .refine((l) => respostasDaLacuna(l.enunciado).length > 0, {
+    message: 'lacuna sem nenhuma marcação {{resposta}} no enunciado',
+    path: ['enunciado'],
+  })
+  .refine(
+    (l) => {
+      const todas = [...respostasDaLacuna(l.enunciado), ...l.distratores]
+      return new Set(todas.map((p) => p.toLowerCase())).size === todas.length
+    },
+    { message: 'palavra repetida entre respostas e distratores', path: ['distratores'] },
+  )
+
+/* --- ordenar -------------------------------------------------------------- */
+
+const passoOrdenar = z
+  .object({
+    ...camposComuns,
+    tipo: z.literal('ordenar'),
+    instrucao: z.string().min(1),
+    /** A ordem escrita aqui é a correta. Na tela aparece embaralhada. */
+    itens: z.array(z.string().min(1)).min(2, 'ordenar precisa de ao menos 2 itens'),
+  })
+  .refine((o) => new Set(o.itens.map((i) => i.trim())).size === o.itens.length, {
+    message: 'itens repetidos — não daria para saber qual vai em qual posição',
+    path: ['itens'],
+  })
+
+/* --- associar ------------------------------------------------------------- */
+
+const parAssociado = z.object({
+  termo: z.string().min(1),
+  definicao: z.string().min(1),
+})
+
+const passoAssociar = z
+  .object({
+    ...camposComuns,
+    tipo: z.literal('associar'),
+    instrucao: z.string().min(1),
+    pares: z.array(parAssociado).min(2, 'associar precisa de ao menos 2 pares'),
+  })
+  .refine((a) => new Set(a.pares.map((p) => p.definicao.trim())).size === a.pares.length, {
+    message: 'duas definições iguais — a associação ficaria ambígua',
+    path: ['pares'],
+  })
+
+/* --- classificar ---------------------------------------------------------- */
+
+const itemClassificavel = z.object({
+  texto: z.string().min(1),
+  categoria: z.string().min(1),
+})
+
+const passoClassificar = z
+  .object({
+    ...camposComuns,
+    tipo: z.literal('classificar'),
+    instrucao: z.string().min(1),
+    categorias: z.array(z.string().min(1)).min(2, 'classificar precisa de ao menos 2 categorias'),
+    itens: z.array(itemClassificavel).min(2, 'classificar precisa de ao menos 2 itens'),
+  })
+  .refine((c) => c.itens.every((i) => c.categorias.includes(i.categoria)), {
+    message: 'algum item aponta para uma categoria que não foi declarada',
+    path: ['itens'],
+  })
+  .refine((c) => new Set(c.categorias).size === c.categorias.length, {
+    message: 'categoria repetida',
+    path: ['categorias'],
+  })
+
+/* --- reflexao ------------------------------------------------------------- */
+
+/**
+ * Pergunta aberta, sem correção. O que a pessoa escreve fica no aparelho dela
+ * e reaparece na lição — a ideia é que ela leve a própria resposta para a aula.
+ */
+const passoReflexao = z.object({
+  ...camposComuns,
+  tipo: z.literal('reflexao'),
+  pergunta: z.string().min(1),
+  dica: z.string().optional(),
+})
+
+/* -------------------------------------------------------------------------- */
+
+export const passo = z
+  .discriminatedUnion('tipo', [passoTexto, passoDestaque, passoReflexao])
+  .or(passoQuiz)
+  .or(passoLacuna)
+  .or(passoOrdenar)
+  .or(passoAssociar)
+  .or(passoClassificar)
 
 /* -------------------------------------------------------------------------- */
 /* Lição                                                                       */
@@ -121,13 +235,23 @@ export type Passo = z.infer<typeof passo>
 export type PassoTexto = z.infer<typeof passoTexto>
 export type PassoDestaque = z.infer<typeof passoDestaque>
 export type PassoQuiz = z.infer<typeof passoQuiz>
+export type PassoLacuna = z.infer<typeof passoLacuna>
+export type PassoOrdenar = z.infer<typeof passoOrdenar>
+export type PassoAssociar = z.infer<typeof passoAssociar>
+export type PassoClassificar = z.infer<typeof passoClassificar>
+export type PassoReflexao = z.infer<typeof passoReflexao>
 export type Alternativa = z.infer<typeof alternativa>
+export type ParAssociado = z.infer<typeof parAssociado>
+export type ItemClassificavel = z.infer<typeof itemClassificavel>
 export type Licao = z.infer<typeof licao>
 export type Modulo = z.infer<typeof modulo>
 export type Trilha = z.infer<typeof trilha>
 
-/** Tipos de passo que exigem resposta para a lição avançar. */
-export const TIPOS_INTERATIVOS = ['quiz'] as const
+/** Passos que são corrigidos: exigem resposta certa para liberar o avanço. */
+export const TIPOS_CORRIGIDOS = ['quiz', 'lacuna', 'ordenar', 'associar', 'classificar'] as const
+
+/** Passos que pedem alguma ação, corrigida ou não. */
+export const TIPOS_INTERATIVOS = [...TIPOS_CORRIGIDOS, 'reflexao'] as const
 
 export function exigeResposta(p: Passo): boolean {
   return (TIPOS_INTERATIVOS as readonly string[]).includes(p.tipo) && !p.opcional

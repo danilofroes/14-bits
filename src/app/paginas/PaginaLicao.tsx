@@ -12,8 +12,9 @@ import {
   responder,
   xpGanho,
 } from '@/engine/motor'
-import type { EstadoLicao } from '@/engine/motor'
+import type { AcaoDisponivel, EstadoLicao } from '@/engine/motor'
 import { IconeXp } from '@/design/icones'
+import { rolarAteVisivel } from '@/lib/rolagem'
 import { NaoEncontrado } from './NaoEncontrado'
 
 export function PaginaLicao() {
@@ -34,24 +35,34 @@ function Executor({ idTrilha, idLicao }: { idTrilha: string; idLicao: string }) 
   const licao = acharLicao(trilha, idLicao)!
 
   const [estado, setEstado] = useState<EstadoLicao>(estadoInicial)
-  const [selecao, setSelecao] = useState<number[]>([])
-  const fimDaLista = useRef<HTMLDivElement>(null)
+  const [escolhas, setEscolhas] = useState<number[]>([])
+  const [texto, setTexto] = useState('')
+  /** Aponta para o passo recém-revelado — é para ele que a tela rola. */
+  const passoAtivo = useRef<HTMLDivElement>(null)
 
   const i = indiceAtual(estado)
-  const acao = acaoDisponivel(licao, estado, selecao)
+  const acao = acaoDisponivel(licao, estado, escolhas, texto)
   const concluirLicao = useProgresso((e) => e.concluirLicao)
+  const guardarReflexao = useProgresso((e) => e.guardarReflexao)
+  const reflexaoSalva = useProgresso((e) => e.reflexaoSalva)
 
   // Rola até o passo recém-revelado. Sem isso, em telas pequenas, a pessoa
   // aperta "Continuar" e não vê nada acontecer.
   useEffect(() => {
-    if (estado.revelados > 1) {
-      fimDaLista.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
-    }
+    if (estado.revelados > 1) rolarAteVisivel(passoAtivo.current)
   }, [estado.revelados])
 
   function aoAgir() {
     if (acao.tipo === 'verificar') {
-      setEstado((atual) => responder(licao, atual, i, selecao))
+      const passo = licao.passos[i]
+      if (passo?.tipo === 'reflexao') {
+        // Reflexão não é corrigida, mas vale guardar: a ideia é a pessoa
+        // reencontrar o que escreveu e levar para a aula.
+        guardarReflexao(idTrilha, idLicao, i, texto)
+        setEstado((atual) => responder(licao, atual, i, [], texto))
+      } else {
+        setEstado((atual) => responder(licao, atual, i, escolhas))
+      }
       return
     }
 
@@ -61,8 +72,16 @@ function Executor({ idTrilha, idLicao }: { idTrilha: string; idLicao: string }) 
       return
     }
 
-    setSelecao([])
+    setEscolhas([])
+    setTexto(proximaReflexao(estado.revelados))
     setEstado((atual) => avancar(licao, atual))
+  }
+
+  /** Recupera o que a pessoa já tinha escrito, se voltar a uma reflexão. */
+  function proximaReflexao(revelados: number): string {
+    const proximo = licao.passos[revelados]
+    if (proximo?.tipo !== 'reflexao') return ''
+    return reflexaoSalva(idTrilha, idLicao, revelados)
   }
 
   if (estado.concluida) {
@@ -110,21 +129,26 @@ function Executor({ idTrilha, idLicao }: { idTrilha: string; idLicao: string }) 
           {passos.map((passo, indice) => (
             <div
               key={passo.id ?? indice}
-              className={indice < i ? 'opacity-70 transition-opacity' : ''}
+              ref={indice === i ? passoAtivo : undefined}
+              // scroll-mt deixa o passo abaixo do cabeçalho fixo em vez de
+              // encostado nele.
+              className={`scroll-mt-20 ${indice < i ? 'opacity-70 transition-opacity' : ''}`}
             >
               <Bloco
                 passo={passo}
                 indice={indice}
                 resposta={estado.respostas[indice]}
-                selecao={indice === i ? selecao : (estado.respostas[indice]?.escolhas ?? [])}
-                aoSelecionar={setSelecao}
+                escolhas={indice === i ? escolhas : (estado.respostas[indice]?.escolhas ?? [])}
+                aoEscolher={setEscolhas}
+                texto={indice === i ? texto : (estado.respostas[indice]?.texto ?? '')}
+                aoEscrever={setTexto}
                 ativo={indice === i}
               />
             </div>
           ))}
         </div>
 
-        <div ref={fimDaLista} className="h-4" />
+        <div className="h-4" />
       </div>
 
       <footer className="border-linha bg-superficie/95 sticky bottom-0 border-t backdrop-blur">
@@ -135,9 +159,7 @@ function Executor({ idTrilha, idLicao }: { idTrilha: string; idLicao: string }) 
             disabled={acao.tipo === 'verificar' && !acao.habilitada}
             className="min-h-toque rounded-suave bg-ceu hover:bg-ceu-forte disabled:bg-superficie-alt disabled:text-tinta-fraca w-full px-6 font-semibold text-white transition-colors disabled:cursor-not-allowed"
           >
-            {acao.tipo === 'verificar' && 'Verificar'}
-            {acao.tipo === 'continuar' && 'Continuar'}
-            {acao.tipo === 'concluir' && 'Concluir lição'}
+            {rotuloDaAcao(acao.tipo, licao.passos[i]?.tipo)}
           </button>
         </div>
       </footer>
@@ -185,4 +207,16 @@ function Conclusao({ idTrilha, idLicao, xp }: { idTrilha: string; idLicao: strin
       </div>
     </div>
   )
+}
+
+/**
+ * O texto do botão principal.
+ *
+ * Numa reflexão não existe resposta certa, então "Verificar" seria mentira —
+ * e logo abaixo o próprio bloco diz que não há resposta errada.
+ */
+function rotuloDaAcao(acao: AcaoDisponivel['tipo'], tipoDoPasso: string | undefined): string {
+  if (acao === 'concluir') return 'Concluir lição'
+  if (acao === 'continuar') return 'Continuar'
+  return tipoDoPasso === 'reflexao' ? 'Guardar resposta' : 'Verificar'
 }
