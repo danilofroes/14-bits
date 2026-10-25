@@ -65,14 +65,12 @@ function TopoDeBoasVindas() {
       <div className="mx-auto max-w-5xl px-5 py-14 sm:py-20">
         <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_1fr]">
           <div>
-
             <h1 className="mb-5 text-4xl leading-[1.05] font-extrabold sm:text-5xl">
               Faça seu primeiro voo
             </h1>
 
             <p className="text-tinta-suave mb-4 max-w-xl text-lg leading-relaxed">
-              Entenda computação — do zero, sem precisar saber programar e sem
-              matemática pesada.
+              Entenda computação — do zero, sem precisar saber programar e sem matemática pesada.
             </p>
             <p className="text-tinta-fraca mb-8 max-w-xl leading-relaxed">
               Em 1906, Santos Dumont voou 60 metros a três de altura no 14-bis. Menos que um
