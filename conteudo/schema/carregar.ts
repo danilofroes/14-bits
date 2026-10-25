@@ -106,6 +106,11 @@ export function carregarConteudo(raizProjeto: string): Resultado {
     const licoes: Record<string, Licao> = {}
     const arquivoPorId = new Map<string, string>()
 
+    // Lições cujo arquivo existe mas não passou na validação. Sem isto, a
+    // checagem de integridade logo abaixo acusaria "não existe no disco" —
+    // mandando quem for corrigir procurar no lugar errado.
+    const invalidas = new Set<string>()
+
     for (const arquivoLicao of procurar(dirTrilha, 'licao.yaml')) {
       arquivos.push(arquivoLicao)
       let dados: unknown
@@ -122,6 +127,9 @@ export function carregarConteudo(raizProjeto: string): Resultado {
       const analise = licao.safeParse(dados)
       if (!analise.success) {
         erros.push({ arquivo: rel(arquivoLicao), mensagem: descreverErroZod(analise.error) })
+        // O id costuma estar legível mesmo quando o resto falhou.
+        const idBruto = (dados as { id?: unknown } | null)?.id
+        if (typeof idBruto === 'string') invalidas.add(idBruto)
         continue
       }
       const l = analise.data
@@ -150,7 +158,8 @@ export function carregarConteudo(raizProjeto: string): Resultado {
     for (const m of t.modulos) {
       for (const idLicao of m.licoes) {
         referenciadas.add(idLicao)
-        if (!licoes[idLicao]) {
+        // Lição inválida já gerou o erro de verdade; repetir aqui só confunde.
+        if (!licoes[idLicao] && !invalidas.has(idLicao)) {
           erros.push({
             arquivo: rel(arquivoTrilha),
             mensagem: `módulo "${m.id}" aponta para a lição "${idLicao}", que não existe no disco`,
