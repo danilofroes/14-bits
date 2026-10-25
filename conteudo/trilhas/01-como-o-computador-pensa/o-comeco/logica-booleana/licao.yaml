@@ -51,14 +51,22 @@ passos:
       - texto: choveu E NÃO fez frio
         categoria: Verdadeiro
 
-  - tipo: destaque
-    estilo: atencao
-    conteudo: |
-      O **OU** do computador não é o "ou" de escolha do dia a dia.
-
-      Quando alguém pergunta "você quer café ou suco?", está pedindo para
-      escolher um. Para o computador, `café OU suco` é verdadeiro se você
-      aceitar café, se aceitar suco, **e também se aceitar os dois**.
+  - tipo: simulador
+    widget: porta-logica
+    instrucao: Mexa nos interruptores e troque o operador. A tabela acende a combinação atual.
+    parametros:
+      entrada_a: choveu
+      entrada_b: fez frio
+    alternativa_texto: |
+      Dois interruptores, um para "choveu" e outro para "fez frio", cada um em
+      verdadeiro ou falso, e botões para escolher entre os operadores E, OU e
+      NÃO. O resultado aparece ao lado, e abaixo há uma tabela com todas as
+      combinações possíveis, com a linha atual destacada.
+    pergunta_apos: |
+      Olhe a última linha da tabela com o **OU**: as duas coisas verdadeiras
+      também dão verdadeiro. O `OU` do computador não é o "ou" de escolha do
+      dia a dia — quando alguém pergunta "café ou suco?", está pedindo para
+      escolher **um**. Aqui, aceitar os dois também vale.
 
   - tipo: quiz
     pergunta: Uma porta abre com `crachá válido E senha correta`. Alguém com crachá válido e senha errada consegue entrar?

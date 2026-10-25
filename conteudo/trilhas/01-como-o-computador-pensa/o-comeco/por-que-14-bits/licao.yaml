@@ -58,20 +58,35 @@ passos:
           Com um bit, não. Mas você está no caminho certo ao pensar que
           juntando bits dá para chegar longe.
 
-  - tipo: texto
-    conteudo: |
-      Agora junte **dois** bits. Cada um pode estar ligado ou desligado, então
-      as combinações são: desligado-desligado, desligado-ligado,
-      ligado-desligado e ligado-ligado.
+  - tipo: simulador
+    widget: binario-contador
+    instrucao: Agora junte vários bits. Ligue e desligue e veja o número mudar.
+    parametros:
+      bits: 8
+      inicial: 5
+    alternativa_texto: |
+      Uma fileira de oito interruptores, cada um valendo o dobro do anterior:
+      1, 2, 4, 8, 16, 32, 64 e 128. Ligar um interruptor soma o valor dele ao
+      total, que aparece embaixo. Com oito bits dá para formar 256 números
+      diferentes, de 0 a 255.
+    pergunta_apos: |
+      Repare no valor embaixo de cada interruptor: 1, 2, 4, 8, 16… **Cada bit
+      que você acrescenta dobra o total.** Não é somar — é dobrar.
 
-      Quatro combinações. Com três bits, oito. Com quatro, dezesseis.
-
-  - tipo: destaque
-    estilo: dica
-    conteudo: |
-      Percebeu o padrão? **Cada bit que você acrescenta dobra o total.**
-
-      Não é somar — é dobrar. É por isso que os números crescem tão rápido.
+  - tipo: quiz
+    pergunta: Com 8 bits dá para formar 256 números. E com **9** bits?
+    alternativas:
+      - texto: '512'
+        correta: true
+        feedback: Isso. Mais um bit, o dobro de tudo que havia antes.
+      - texto: '257'
+        feedback: |
+          Seria assim se cada bit somasse um. Mas o bit novo dobra o total:
+          256 vira 512.
+      - texto: '264'
+        feedback: |
+          Esse seria 256 mais 8. A conta não soma a quantidade de bits — ela
+          dobra a cada bit.
 
   - tipo: quiz
     pergunta: Seguindo essa lógica, quantas combinações dão **3 bits**?

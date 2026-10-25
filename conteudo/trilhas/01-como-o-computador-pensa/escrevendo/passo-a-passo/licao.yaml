@@ -52,14 +52,22 @@ passos:
       - Repita enquanto ainda houver temperaturas na lista
       - Mostre a maior até agora
 
-  - tipo: destaque
-    estilo: dica
-    conteudo: |
-      Olhe o primeiro passo com atenção. Ele parece bobo, mas é o que impede
-      o erro mais comum: começar comparando com o nada.
-
-      Se você começasse com "a maior é zero", uma semana inteira de
-      temperaturas negativas daria a resposta errada.
+  - tipo: simulador
+    widget: fluxo-algoritmo
+    instrucao: Agora veja o algoritmo rodando. Avance um passo de cada vez.
+    parametros:
+      programa: maior-de-uma-lista
+      dados: [23, 31, 27, 35, 29]
+    alternativa_texto: |
+      O algoritmo é executado passo a passo. A cada passo, a lista de
+      temperaturas destaca o número sendo olhado, a linha do pseudocódigo em
+      execução fica acesa, e as variáveis na memória mostram seus valores
+      atuais. Uma nota explica o que mudou em cada passo.
+    pergunta_apos: |
+      Olhe o primeiro passo com atenção: ele parece bobo, mas é o que impede o
+      erro mais comum — começar comparando com o nada. Se o algoritmo
+      começasse com "a maior é zero", uma semana inteira de temperaturas
+      negativas daria a resposta errada.
 
   - tipo: quiz
     pergunta: Por que o passo "repita enquanto ainda houver temperaturas" precisa existir?
