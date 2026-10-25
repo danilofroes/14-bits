@@ -43,7 +43,7 @@ Trilha  →  Módulo  →  Lição  →  Passo
 
 Uma lição tem de 6 a 12 passos e dura de 5 a 8 minutos. Se passar de 12 passos, o validador avisa: é hora de quebrar em duas.
 
-Cada passo é de um tipo. Hoje existem oito:
+Cada passo é de um tipo. Hoje existem nove:
 
 | Tipo          | Para quê                                                    |
 | ------------- | ----------------------------------------------------------- |
@@ -55,6 +55,7 @@ Cada passo é de um tipo. Hoje existem oito:
 | `associar`    | Ligar cada termo à sua definição                            |
 | `classificar` | Separar itens em categorias                                 |
 | `reflexao`    | Pergunta aberta, sem correção, guardada no aparelho         |
+| `simulador`   | Widget interativo — ver `src/simuladores/`                  |
 
 Nos quatro exercícios de colocação o gesto é sempre o mesmo: **toque para
 escolher, toque para colocar**. Nada é arrastado — arrastar não funciona bem

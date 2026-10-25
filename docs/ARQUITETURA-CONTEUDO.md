@@ -198,7 +198,7 @@ Isso é uma lição inteira. Sem uma linha de código.
 | Tipo        | Estado | Uso                                                                         |
 | ----------- | ------ | --------------------------------------------------------------------------- |
 | `reflexao`  | pronto | Resposta aberta, salva localmente, sem correção                             |
-| `simulador` | futuro | Widget interativo do catálogo (§5)                                          |
+| `simulador` | pronto | Widget interativo do catálogo (§5)                                          |
 | `enquete`   | futuro | Pergunta rápida de turma — resultado agregado na tela do professor (fase 2) |
 
 ### 4.4. Campos comuns a todos os blocos
@@ -224,12 +224,12 @@ src/simuladores/registry.ts   →  { 'classificador-fronteira': ClassificadorFro
 
 ### 5.1. Trilha 1 — Como o computador pensa
 
-| Widget             | O que o aluno faz                             | Intuição construída                 |
-| ------------------ | --------------------------------------------- | ----------------------------------- |
-| `binario-contador` | Liga e desliga 8 bits                         | Número é combinação de liga/desliga |
-| `porta-logica`     | Aciona chaves em AND / OR / NOT               | Decisão nasce de lógica simples     |
-| `fluxo-algoritmo`  | Executa um pseudocódigo passo a passo         | Programa é sequência, não mágica    |
-| `receita-ambigua`  | Dá instruções vagas a um robô e vê dar errado | Por que o computador exige precisão |
+| Widget                | O que o aluno faz                             | Intuição construída                 |
+| --------------------- | --------------------------------------------- | ----------------------------------- |
+| `binario-contador` ✅ | Liga e desliga os bits                        | Número é combinação de liga/desliga |
+| `porta-logica`        | Aciona chaves em AND / OR / NOT               | Decisão nasce de lógica simples     |
+| `fluxo-algoritmo`     | Executa um pseudocódigo passo a passo         | Programa é sequência, não mágica    |
+| `receita-ambigua`     | Dá instruções vagas a um robô e vê dar errado | Por que o computador exige precisão |
 
 ### 5.2. Trilha 2 — Como o computador aprende
 
@@ -264,6 +264,29 @@ src/simuladores/registry.ts   →  { 'classificador-fronteira': ClassificadorFro
 | `alerta-antecipado` | Compara reagir depois × prever antes              | O argumento central do SALVE                          |
 
 `matriz-confusao` é a ponte direta com a §4.4.2 do edital — falso negativo como maior risco sanitário. É o simulador que transforma a sua pesquisa em aula.
+
+### 5.4-bis. Como um simulador é declarado
+
+```yaml
+- tipo: simulador
+  widget: binario-contador
+  instrucao: Ligue e desligue e veja o número mudar.
+  parametros:
+    bits: 8
+    inicial: 5
+  alternativa_texto: |
+    Descrição do que o gráfico mostra, lida por quem usa leitor de tela.
+  pergunta_apos: |
+    A ideia que a pessoa deve levar embora depois de brincar com o widget.
+```
+
+Os nomes de widget válidos e os parâmetros de cada um vivem em
+`conteudo/schema/simuladores.ts`, fora de `src/` **de propósito**: assim o
+validador consegue checá-los sem importar React. Errar o nome de um widget ou
+passar um parâmetro fora da faixa quebra o `npm run validar`, não a aula.
+
+`alternativa_texto` é obrigatório. Sem ele o exercício simplesmente não existe
+para quem não enxerga, e por isso o schema recusa um simulador sem descrição.
 
 ### 5.5. Contrato obrigatório de todo simulador
 
@@ -326,7 +349,7 @@ Nem tudo precisa existir no dia 1. Ordem por retorno sobre esforço:
 **Onda 2 — pronta:**
 `lacuna`, `ordenar`, `associar`, `classificar`, `reflexao`
 
-**Onda 3 — próxima, é o que diferencia o app de um formulário de quiz:**
+**Onda 3 — pronta (infraestrutura + os três widgets da Trilha 1):**
 `simulador` + os 4 primeiros widgets, `comparacao`
 
 **Onda 4 — depois:**
