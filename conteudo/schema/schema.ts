@@ -13,6 +13,8 @@
  */
 
 import { z } from 'zod'
+import { IDS_DE_WIDGET, PARAMETROS_POR_WIDGET } from './simuladores.ts'
+import type { IdWidget } from './simuladores.ts'
 
 /* -------------------------------------------------------------------------- */
 /* Blocos                                                                      */
@@ -156,6 +158,52 @@ const passoClassificar = z
     path: ['categorias'],
   })
 
+/* --- simulador ------------------------------------------------------------ */
+
+/**
+ * Widget interativo. É o que separa o app de um formulário de quiz.
+ *
+ * Todo simulador carrega `alternativa_texto` obrigatório — a descrição que um
+ * leitor de tela lê no lugar do gráfico. Sem isso o exercício simplesmente não
+ * existe para quem não enxerga, e por isso o campo não é opcional.
+ */
+const passoSimulador = z
+  .object({
+    ...camposComuns,
+    tipo: z.literal('simulador'),
+    widget: z.string().min(1),
+    instrucao: z.string().min(1),
+    parametros: z.record(z.string(), z.unknown()).default({}),
+    alternativa_texto: z
+      .string()
+      .min(20, 'descreva o que o simulador mostra, para quem usa leitor de tela'),
+    /** Pergunta solta depois do widget, sem correção. */
+    pergunta_apos: z.string().optional(),
+  })
+  .superRefine((passo, ctx) => {
+    const esquema = PARAMETROS_POR_WIDGET[passo.widget as IdWidget]
+
+    if (!esquema) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['widget'],
+        message: `simulador "${passo.widget}" não existe. Disponíveis: ${IDS_DE_WIDGET.join(', ')}`,
+      })
+      return
+    }
+
+    const analise = esquema.safeParse(passo.parametros)
+    if (!analise.success) {
+      for (const problema of analise.error.issues) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['parametros', ...problema.path],
+          message: problema.message,
+        })
+      }
+    }
+  })
+
 /* --- reflexao ------------------------------------------------------------- */
 
 /**
@@ -178,6 +226,7 @@ export const passo = z
   .or(passoOrdenar)
   .or(passoAssociar)
   .or(passoClassificar)
+  .or(passoSimulador)
 
 /* -------------------------------------------------------------------------- */
 /* Lição                                                                       */
@@ -240,6 +289,7 @@ export type PassoOrdenar = z.infer<typeof passoOrdenar>
 export type PassoAssociar = z.infer<typeof passoAssociar>
 export type PassoClassificar = z.infer<typeof passoClassificar>
 export type PassoReflexao = z.infer<typeof passoReflexao>
+export type PassoSimulador = z.infer<typeof passoSimulador>
 export type Alternativa = z.infer<typeof alternativa>
 export type ParAssociado = z.infer<typeof parAssociado>
 export type ItemClassificavel = z.infer<typeof itemClassificavel>

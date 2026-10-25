@@ -20,6 +20,7 @@ import { BlocoOrdenar } from './BlocoOrdenar'
 import { BlocoAssociar } from './BlocoAssociar'
 import { BlocoClassificar } from './BlocoClassificar'
 import { BlocoReflexao } from './BlocoReflexao'
+import { BlocoSimulador } from './BlocoSimulador'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const REGISTRY: Record<Passo['tipo'], ComponentType<PropsBloco<any>>> = {
@@ -31,6 +32,7 @@ const REGISTRY: Record<Passo['tipo'], ComponentType<PropsBloco<any>>> = {
   associar: BlocoAssociar,
   classificar: BlocoClassificar,
   reflexao: BlocoReflexao,
+  simulador: BlocoSimulador,
 }
 
 export function Bloco(props: PropsBloco) {
